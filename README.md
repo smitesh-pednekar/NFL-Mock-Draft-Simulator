@@ -45,8 +45,8 @@ flowchart TB
     subgraph Browser["🌐 User Browser"]
         subgraph Next["Next.js 16 — App Router / React 19"]
             TS[TeamSelection Screen]
-            DB["DraftBoard\n3-col grid / tab view"]
-            DR["DraftResults\n+ Share Modal"]
+            DB["DraftBoard<br/>3-col grid / tab view"]
+            DR["DraftResults<br/>+ Share Modal"]
             TS & DB & DR --> ZS
             subgraph ZS["Zustand Store"]
                 DS[draftStore]
@@ -72,14 +72,14 @@ flowchart TB
         end
         Services --> State
         subgraph State["In-Memory State"]
-            SS["DraftSession\nTTL: 1 hour"]
+            SS["DraftSession<br/>TTL: 1 hour"]
         end
     end
 
     SV2 -- "HTTPS" --> Groq
 
     subgraph Groq["🤖 Groq Cloud"]
-        LLM["llama-3.1-8b-instant\nLLM Inference"]
+        LLM["llama-3.1-8b-instant<br/>LLM Inference"]
     end
 ```
 

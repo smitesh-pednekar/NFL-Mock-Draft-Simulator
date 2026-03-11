@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { RotateCcw, Trophy, Share2, History } from "lucide-react";
+import { RotateCcw, Trophy, Share2, History, Home, ChevronRight } from "lucide-react";
 import type { DraftResults, SavedDraft, TeamWithRoster } from "@/lib/types";
 import { PositionBadge } from "@/components/ui/PositionBadge";
 import { TEAM_LOGOS } from "@/lib/constants";
@@ -33,6 +33,19 @@ export function DraftResults({ results, draftState, onRestart }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-4">
+        <button
+          onClick={onRestart}
+          className="inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <Home size={12} />
+          Home
+        </button>
+        <ChevronRight size={12} className="text-gray-400 shrink-0" />
+        <span className="text-gray-900 dark:text-white font-semibold">Draft Results</span>
+      </nav>
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

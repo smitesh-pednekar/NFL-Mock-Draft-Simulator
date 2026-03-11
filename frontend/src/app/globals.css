@@ -6,6 +6,32 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Tailwind v4 generates utilities inside @layer utilities (low cascade priority).
+  These unlayered overrides sit outside any @layer, giving them higher priority
+  and ensuring responsive display variants always beat the base `hidden` class.
+*/
+@media (min-width: 640px) {
+  .sm\:flex   { display: flex; }
+  .sm\:grid   { display: grid; }
+  .sm\:block  { display: block; }
+  .sm\:hidden { display: none; }
+  .sm\:inline-flex { display: inline-flex; }
+}
+@media (min-width: 768px) {
+  .md\:flex   { display: flex; }
+  .md\:grid   { display: grid; }
+  .md\:block  { display: block; }
+  .md\:hidden { display: none; }
+  .md\:inline-flex { display: inline-flex; }
+}
+@media (min-width: 1024px) {
+  .lg\:flex   { display: flex; }
+  .lg\:grid   { display: grid; }
+  .lg\:block  { display: block; }
+  .lg\:hidden { display: none; }
+}
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;

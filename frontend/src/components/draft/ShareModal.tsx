@@ -113,10 +113,14 @@ export function ShareModal({ team, onClose }: Props) {
           </button>
         </div>
 
-        {/* Card preview — vertically scrollable, card horizontally scrollable on small screens */}
+        {/* Card preview — vertically scrollable, card horizontally scrollable on small screens.
+             Pattern: overflow-x-auto on outer, w-max min-w-full on inner.
+             This prevents the justify-center + overflow-x-auto left-clip bug. */}
         <div className="flex-1 min-h-0 overflow-y-auto bg-gray-950/50">
-          <div className="p-4 sm:p-5 overflow-x-auto flex justify-center">
-            <DraftShareCard ref={cardRef} team={team} />
+          <div className="overflow-x-auto">
+            <div className="p-4 sm:p-5 w-max min-w-full flex justify-center">
+              <DraftShareCard ref={cardRef} team={team} />
+            </div>
           </div>
         </div>
 

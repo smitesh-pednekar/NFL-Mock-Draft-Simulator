@@ -40,85 +40,68 @@ Pick any of **7 NFL franchises** and make your selections through **4 rounds** o
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         USER BROWSER                            │
-│                                                                 │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │              Next.js 16  (App Router / React 19)        │   │
-│  │                                                         │   │
-│  │  ┌───────────────┐   ┌──────────────┐  ┌────────────┐  │   │
-│  │  │  TeamSelection│   │  DraftBoard  │  │DraftResults│  │   │
-│  │  │    Screen     │   │  (3-col grid │  │  + Share   │  │   │
-│  │  │               │   │  / tab view) │  │   Modal)   │  │   │
-│  │  └───────┬───────┘   └──────┬───────┘  └─────┬──────┘  │   │
-│  │          │                  │                 │         │   │
-│  │          └──────────────────┼─────────────────┘         │   │
-│  │                             │                           │   │
-│  │           ┌─────────────────▼──────────────────┐        │   │
-│  │           │         Zustand Store               │        │   │
-│  │           │  draftStore  │  historyStore        │        │   │
-│  │           │  (persisted via localStorage)       │        │   │
-│  │           └─────────────────┬──────────────────┘        │   │
-│  │                             │  REST + SSE                │   │
-│  └─────────────────────────────┼─────────────────────────── ┘  │
-└────────────────────────────────┼────────────────────────────────┘
-                                 │  HTTPS
-                    ┌────────────▼────────────┐
-                    │     FastAPI Backend      │
-                    │    (Render · Python)     │
-                    │                         │
-                    │  ┌───────────────────┐  │
-                    │  │      Routers      │  │
-                    │  │  /api/draft/*     │  │
-                    │  │  /api/prospects   │  │
-                    │  │  /api/teams       │  │
-                    │  │  /api/health      │  │
-                    │  └────────┬──────────┘  │
-                    │           │             │
-                    │  ┌────────▼──────────┐  │
-                    │  │     Services      │  │
-                    │  │  draft_service    │  │
-                    │  │  ai_service       │  │
-                    │  │  player_service   │  │
-                    │  └────────┬──────────┘  │
-                    │           │             │
-                    │  ┌────────▼──────────┐  │
-                    │  │   In-Memory State │  │
-                    │  │   DraftSession    │  │
-                    │  │   (TTL: 1hr)      │  │
-                    │  └───────────────────┘  │
-                    └────────────┬────────────┘
-                                 │  HTTPS
-                    ┌────────────▼────────────┐
-                    │       Groq Cloud        │
-                    │  llama-3.1-8b-instant   │
-                    │  (LLM inference)        │
-                    └─────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Browser["🌐 User Browser"]
+        subgraph Next["Next.js 16 — App Router / React 19"]
+            TS[TeamSelection Screen]
+            DB["DraftBoard\n3-col grid / tab view"]
+            DR["DraftResults\n+ Share Modal"]
+            TS & DB & DR --> ZS
+            subgraph ZS["Zustand Store"]
+                DS[draftStore]
+                HS[historyStore]
+            end
+        end
+    end
+
+    ZS -- "REST + SSE / HTTPS" --> Routers
+
+    subgraph Backend["⚙️ FastAPI Backend — Render · Python 3.13"]
+        subgraph Routers[Routers]
+            R1["/api/draft/*"]
+            R2["/api/prospects"]
+            R3["/api/teams"]
+            R4["/api/health"]
+        end
+        Routers --> Services
+        subgraph Services[Services]
+            SV1[draft_service]
+            SV2[ai_service]
+            SV3[player_service]
+        end
+        Services --> State
+        subgraph State["In-Memory State"]
+            SS["DraftSession\nTTL: 1 hour"]
+        end
+    end
+
+    SV2 -- "HTTPS" --> Groq
+
+    subgraph Groq["🤖 Groq Cloud"]
+        LLM["llama-3.1-8b-instant\nLLM Inference"]
+    end
 ```
 
 ---
 
 ## 🔄 AI Pick — Request Flow
 
-```
-Frontend                     Backend                        Groq
-   │                            │                             │
-   │  GET /ai-pick/stream (SSE) │                             │
-   │──────────────────────────▶ │                             │
-   │                            │  Build context prompt       │
-   │                            │  (needs + BPA pool + state) │
-   │  event: thinking           │                             │
-   │◀────────────────────────── │                             │
-   │                            │  POST /chat/completions     │
-   │                            │────────────────────────────▶│
-   │                            │◀────────────────────────────│
-   │                            │  Parse JSON response        │
-   │                            │  Apply pick to DraftSession │
-   │  event: complete           │                             │
-   │  { pick, reasoning }       │                             │
-   │◀────────────────────────── │                             │
-   │  Close SSE connection      │                             │
+```mermaid
+sequenceDiagram
+    participant FE as 🖥️ Frontend
+    participant BE as ⚙️ Backend
+    participant GQ as 🤖 Groq Cloud
+
+    FE->>BE: GET /api/draft/{id}/ai-pick/stream (SSE)
+    BE-->>FE: event: thinking
+    Note over BE: Build smart context prompt<br/>(team needs + BPA pool + roster state)
+    BE->>GQ: POST /chat/completions<br/>llama-3.1-8b-instant
+    GQ-->>BE: JSON { selected_player_id, reasoning }
+    Note over BE: Parse response → apply pick<br/>to DraftSession in-memory state
+    BE-->>FE: event: complete { pick, reasoning }
+    BE-->>FE: Close SSE stream
+    Note over FE: Update Zustand store<br/>Trigger next pick or await user
 ```
 
 ---

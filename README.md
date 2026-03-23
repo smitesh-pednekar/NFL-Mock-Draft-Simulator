@@ -9,19 +9,11 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
-[![Demo Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/130lXJczH8LqfEmIGIKNlv9Pt5cyoR9aw/view)
+
 
 </div>
 
----
 
-## 🎬 Demo
-
-▶️ **[Watch Demo Video](https://drive.google.com/file/d/130lXJczH8LqfEmIGIKNlv9Pt5cyoR9aw/view)**
-
-> **Note:** Please download the file if playback fails in the browser.
-
----
 
 ## 📸 Overview
 

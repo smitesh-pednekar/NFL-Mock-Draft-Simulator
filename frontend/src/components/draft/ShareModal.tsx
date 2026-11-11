@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SHARE_TEXT = (abbr: string) =>
-  `I just completed my 2026 NFL Mock Draft with the ${abbr}! Check out my picks 🏈 #NFLDraft2026 #EssentiallySports`;
+  `I just completed my 2026 NFL Mock Draft with the ${abbr}! Check out my picks 🏈 #NFLDraft2026`;
 
 export function ShareModal({ team, onClose }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);

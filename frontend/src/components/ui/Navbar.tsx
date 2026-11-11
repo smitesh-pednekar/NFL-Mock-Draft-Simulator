@@ -1,35 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { ClipboardList, Newspaper, Mail, Menu, X, Sun, Moon, History } from "lucide-react";
+import { Menu, X, Sun, Moon, History } from "lucide-react";
 import { useTheme } from "next-themes";
 import { AnimatePresence } from "framer-motion";
 import { DraftHistoryDrawer } from "@/components/draft/DraftHistoryDrawer";
 import { DraftCompareModal } from "@/components/draft/DraftCompareModal";
 import { useHistoryStore } from "@/store/historyStore";
 import type { SavedDraft } from "@/lib/types";
-
-const NAV_LINKS = [
-  {
-    href: "https://www.essentiallysports.com/nfl-draft-board/",
-    label: "NFL Draft Board",
-    icon: ClipboardList,
-    cta: false,
-  },
-  {
-    href: "https://www.essentiallysports.com/category/nfl/",
-    label: "NFL News",
-    icon: Newspaper,
-    cta: false,
-  },
-  {
-    href: "https://www.essentiallysports.com/newsletter-hub/",
-    label: "Newsletter",
-    icon: Mail,
-    cta: true,
-  },
-] as const;
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -61,36 +39,12 @@ export function Navbar() {
           className="shrink-0 cursor-pointer"
           aria-label="Reload"
         >
-          <Image
-            src="/essentially_sports_logo.webp"
-            alt="EssentiallySports"
-            width={150}
-            height={34}
-            className="object-contain"
-            priority
-          />
+          <span className="text-lg font-black tracking-tight text-gray-900 dark:text-white">NFL Mock Draft</span>
         </button>
 
         {/* Desktop nav links */}
         <nav className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map(({ href, label, icon: Icon, cta }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={
-                cta
-                  ? "inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-colors"
-                  : "inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-              }
-            >
-              <Icon size={15} />
-              {label}
-            </a>
-          ))}
-
-          {/* History button — desktop, after Newsletter */}
+          {/* History button — desktop */}
           <button
             onClick={() => setShowHistory(true)}
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
@@ -135,23 +89,6 @@ export function Navbar() {
       {/* Mobile dropdown */}
       {mobileOpen && (
         <nav className="md:hidden border-t border-gray-200 dark:border-white/10 bg-white dark:bg-gray-950/95 px-4 py-3 flex flex-col gap-1">
-          {NAV_LINKS.map(({ href, label, icon: Icon, cta }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileOpen(false)}
-              className={
-                cta
-                  ? "inline-flex items-center gap-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 px-4 py-2.5 rounded-lg transition-colors"
-                  : "inline-flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-              }
-            >
-              <Icon size={16} />
-              {label}
-            </a>
-          ))}
           {/* History — mobile dropdown */}
           <button
             onClick={() => { setMobileOpen(false); setShowHistory(true); }}

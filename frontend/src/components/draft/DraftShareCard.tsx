@@ -216,15 +216,9 @@ export const DraftShareCard = forwardRef<HTMLDivElement, Props>(
           }}
         >
           <div style={{ fontSize: 11, color: "#475569" }}>
-            essentiallysports.com
+            NFL Mock Draft Simulator
           </div>
-          {/* Logo from public folder — plain <img> required for html-to-image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/essentially_sports_logo.webp"
-            alt="EssentiallySports"
-            style={{ height: 18, objectFit: "contain", display: "block" }}
-          />
+          <div />
           <div style={{ fontSize: 11, color: "#475569" }}>
             NFL Mock Draft 2026
           </div>

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: "NFL Mock Draft Simulator 2026",
   description: "AI-powered NFL Mock Draft Simulator – pick your team and draft 4 rounds against AI GMs.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon.svg",
   },
 };
 
